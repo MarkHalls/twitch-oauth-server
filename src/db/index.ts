@@ -1,1 +1,1 @@
-export { addUser } from "./database";
+export { init, addUser, getUser } from "./database";
