@@ -8,6 +8,7 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
+    "keypair": "^1.0.1",
     "sqlite": "^2.8.0",
     "twitch-api-v5": "^2.0.2"
   },
