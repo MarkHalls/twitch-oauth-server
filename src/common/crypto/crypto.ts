@@ -28,7 +28,7 @@ const encrypt = plain_text => {
 
   const hmac = crypto.createHmac(hmacAlgorithm, HMAC_KEY);
   hmac.update(cipher_text);
-  hmac.update(IV.toString("hex")); // ensure that both the IV and the cipher-text is protected by the HMAC
+  hmac.update(IV.toString("hex"));
 
   // The IV isn't a secret so it can be stored along side everything else
   return cipher_text + "$" + IV.toString("hex") + "$" + hmac.digest("hex");
@@ -50,8 +50,8 @@ var decrypt = function(cipher_text) {
   }
 
   const decryptor = crypto.createDecipheriv(algorithm, key, IV);
-  const decryptedText = decryptor.update(ct, "hex", "utf-8");
-  return decryptedText + decryptor.final("utf-8");
+  const decryptedText = decryptor.update(ct, "hex", "utf8");
+  return decryptedText + decryptor.final("utf8");
 };
 
 var constant_time_compare = function(val1, val2) {
