@@ -1,0 +1,18 @@
+{
+  "name": "twitch-oauth-server",
+  "version": "0.0.1",
+  "description": "Server for getting and storing twitch oauth tokens",
+  "main": "index.js",
+  "repository": "git@github.com:firesetter/twitch-oauth-server.git",
+  "author": "Mark Halls <firesetterdev@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "sqlite": "^2.8.0",
+    "twitch-api-v5": "^2.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.31",
+    "typescript": "^2.6.0-dev.20170930"
+  }
+}
