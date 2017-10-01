@@ -2,27 +2,31 @@ import * as crypto from "crypto";
 
 const algorithm = "AES-256-CTR"; // CBC because CTR isn't possible with the current version of the Node.JS crypto library
 const hmacAlgorithm = "SHA256";
-const key = crypto.randomBytes(32); // This key should be stored in an environment variable
-HMAC_KEY = crypto.randomBytes(32); // This key should be stored in an environment variable
 
-const keygen = () => {
-  return;
+const getKey = (type: string) => {
+  const getKey = decrypt(db.getCryptoKey(type));
+  if (getKey) {
+    return getKey;
+  } else {
+    const setKey = crypto.randomBytes(32);
+    db.setCryptoKey(type, encrypt(setKey));
+    return key;
+  }
 };
 
-const encrypt = plain_text => {
-  var IV = new Buffer(crypto.randomBytes(16)); // ensure that the IV (initialization vector) is random
-  var cipher_text;
-  var hmac;
-  var encryptor;
+const key = getKey("key");
+const HMAC_KEY = getKey("hmac");
 
-  encryptor = crypto.createCipheriv(ALGORITHM, KEY, IV);
+const encrypt = plain_text => {
+  const IV = new Buffer(crypto.randomBytes(16)); // ensure that the IV (initialization vector) is random
+  const encryptor = crypto.createCipheriv(algorithm, key, IV);
   encryptor.setEncoding("hex");
   encryptor.write(plain_text);
   encryptor.end();
 
-  cipher_text = encryptor.read();
+  const cipher_text = encryptor.read();
 
-  hmac = crypto.createHmac(HMAC_ALGORITHM, HMAC_KEY);
+  const hmac = crypto.createHmac(hmacAlgorithm, HMAC_KEY);
   hmac.update(cipher_text);
   hmac.update(IV.toString("hex")); // ensure that both the IV and the cipher-text is protected by the HMAC
 
@@ -31,13 +35,12 @@ const encrypt = plain_text => {
 };
 
 var decrypt = function(cipher_text) {
-  var cipher_blob = cipher_text.split("$");
-  var ct = cipher_blob[0];
-  var IV = new Buffer(cipher_blob[1], "hex");
-  var hmac = cipher_blob[2];
-  var decryptor;
+  const cipher_blob = cipher_text.split("$");
+  const ct = cipher_blob[0];
+  const IV = new Buffer(cipher_blob[1], "hex");
+  const hmac = cipher_blob[2];
 
-  chmac = crypto.createHmac(HMAC_ALGORITHM, HMAC_KEY);
+  const chmac = crypto.createHmac(hmacAlgorithm, HMAC_KEY);
   chmac.update(ct);
   chmac.update(IV.toString("hex"));
 
@@ -46,8 +49,8 @@ var decrypt = function(cipher_text) {
     return null;
   }
 
-  decryptor = crypto.createDecipheriv(ALGORITHM, KEY, IV);
-  decryptor.update(ct, "hex", "utf-8");
+  const decryptor = crypto.createDecipheriv(algorithm, key, IV);
+  const decryptedText = decryptor.update(ct, "hex", "utf-8");
   return decryptedText + decryptor.final("utf-8");
 };
 
@@ -65,4 +68,4 @@ var constant_time_compare = function(val1, val2) {
   return sentinel === 0;
 };
 
-export { keygen, encrypt, decrypt };
+export { getKey, encrypt, decrypt };
