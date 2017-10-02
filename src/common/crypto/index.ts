@@ -1,1 +1,1 @@
-export { getKey, encrypt, decrypt } from "./crypto";
+export { createKeyPair, encrypt, decrypt } from "./crypto";
