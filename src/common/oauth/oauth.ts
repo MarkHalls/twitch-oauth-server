@@ -44,4 +44,4 @@ const generateStateToken = () => (
   randomBytes(16).then(buf => buf.toString("hex"))
 );
 
-export { getAuthorizeUrl, generateStateToken };
+export { Scope, TokenOptions, getAuthorizeUrl, generateStateToken };
