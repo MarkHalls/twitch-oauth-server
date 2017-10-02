@@ -8,9 +8,9 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
+    "axios": "^0.16.2",
     "keypair": "^1.0.1",
-    "sqlite": "^2.8.0",
-    "twitch-api-v5": "^2.0.2"
+    "sqlite": "^2.8.0"
   },
   "devDependencies": {
     "@types/node": "^8.0.31",
